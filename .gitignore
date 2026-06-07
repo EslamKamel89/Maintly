@@ -22,3 +22,7 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+summarize_script.txt
+summarize.py
+app__Models.txt
+database__migrations.txt
