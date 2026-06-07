@@ -39,6 +39,7 @@ class User extends Authenticatable implements PasskeyUser {
         return [
             'role' => UserRole::class,
             'email_verified_at' => 'datetime',
+            'two_factor_confirmed_at' => 'datetime',
             'password' => 'hashed',
         ];
     }

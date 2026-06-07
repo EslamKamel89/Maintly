@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 class WorkOrderAssignment extends Pivot {
     protected $table = 'work_order_assignments';
     public $timestamps = true;
-    protected function casts() {
+    protected function casts(): array {
         return [
             'assigned_at' => 'datetime',
 

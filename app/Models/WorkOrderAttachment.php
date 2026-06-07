@@ -20,7 +20,7 @@ class WorkOrderAttachment extends Model {
     /** @use HasFactory<\Database\Factories\WorkOrderAttachmentFactory> */
     use HasFactory;
 
-    protected function casts() {
+    protected function casts(): array {
         return [
             'file_size' => 'integer',
         ];
