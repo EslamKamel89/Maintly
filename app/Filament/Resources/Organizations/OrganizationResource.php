@@ -10,49 +10,60 @@ use App\Filament\Resources\Organizations\Schemas\OrganizationForm;
 use App\Filament\Resources\Organizations\Schemas\OrganizationInfolist;
 use App\Filament\Resources\Organizations\Tables\OrganizationsTable;
 use App\Models\Organization;
+use App\Models\User;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Override;
 
-class OrganizationResource extends Resource
-{
+class OrganizationResource extends Resource {
     protected static ?string $model = Organization::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    public static function form(Schema $schema): Schema
-    {
+    public static function form(Schema $schema): Schema {
         return OrganizationForm::configure($schema);
     }
 
-    public static function infolist(Schema $schema): Schema
-    {
+    public static function infolist(Schema $schema): Schema {
         return OrganizationInfolist::configure($schema);
     }
 
-    public static function table(Table $table): Table
-    {
+    public static function table(Table $table): Table {
         return OrganizationsTable::configure($table);
     }
 
-    public static function getRelations(): array
-    {
+    public static function getRelations(): array {
         return [
             //
         ];
     }
 
-    public static function getPages(): array
-    {
+    public static function getPages(): array {
         return [
             'index' => ListOrganizations::route('/'),
             'create' => CreateOrganization::route('/create'),
             'view' => ViewOrganization::route('/{record}'),
             'edit' => EditOrganization::route('/{record}/edit'),
         ];
+    }
+
+    #[Override]
+    public static function shouldRegisterNavigation(): bool {
+        /** @var User|null $user */
+        $user = auth()->user();
+        return $user?->isAdmin() ?? false;
+    }
+
+    #[Override]
+    public static function canAccess(): bool {
+        /** @var User|null $user */
+        $user = auth()->user();
+
+        return $user?->isAdmin() ?? false;
     }
 }
