@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Users;
 
+use App\Context\OrganizationContext;
 use App\Filament\Resources\Users\Pages\CreateUser;
 use App\Filament\Resources\Users\Pages\EditUser;
 use App\Filament\Resources\Users\Pages\ListUsers;
@@ -15,6 +16,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Override;
 
 class UserResource extends Resource {
@@ -69,5 +71,16 @@ class UserResource extends Resource {
         return $user?->isAdmin()
             || $user?->isOwner()
             || $user?->isManager();
+    }
+
+    #[Override]
+    public static function getEloquentQuery(): Builder {
+        /** @var User|null $user */
+        $user = auth()->user();
+        $query = parent::getEloquentQuery();
+        if ($user?->isAdmin()) {
+            return $query;
+        }
+        return $query->where('organization_id', OrganizationContext::id());
     }
 }
