@@ -7,6 +7,16 @@
 
         <form method="POST" action="{{ route('register.store') }}" class="flex flex-col gap-6">
             @csrf
+            <flux:input
+                name="organization_name"
+                :label="__('Organization Name')"
+                :value="old('organization_name')"
+                type="text"
+                required
+                autofocus
+                autocomplete="organization"
+                :placeholder="__('Organization Name')" />
+
             <!-- Name -->
             <flux:input
                 name="name"
@@ -14,10 +24,8 @@
                 :value="old('name')"
                 type="text"
                 required
-                autofocus
                 autocomplete="name"
-                :placeholder="__('Full name')"
-            />
+                :placeholder="__('Full name')" />
 
             <!-- Email Address -->
             <flux:input
@@ -27,8 +35,7 @@
                 type="email"
                 required
                 autocomplete="email"
-                placeholder="email@example.com"
-            />
+                placeholder="email@example.com" />
 
             <!-- Password -->
             <flux:input
@@ -39,8 +46,7 @@
                 autocomplete="new-password"
                 :placeholder="__('Password')"
                 passwordrules="{{ \Illuminate\Validation\Rules\Password::defaults()->toPasswordRulesString() }}"
-                viewable
-            />
+                viewable />
 
             <!-- Confirm Password -->
             <flux:input
@@ -51,8 +57,7 @@
                 autocomplete="new-password"
                 :placeholder="__('Confirm password')"
                 passwordrules="{{ \Illuminate\Validation\Rules\Password::defaults()->toPasswordRulesString() }}"
-                viewable
-            />
+                viewable />
 
             <div class="flex items-center justify-end">
                 <flux:button type="submit" variant="primary" class="w-full" data-test="register-user-button">
