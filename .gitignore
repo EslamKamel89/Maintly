@@ -26,4 +26,5 @@ summarize_script.txt
 summarize.py
 app__Models.txt
 database__migrations.txt
+app__Filament.txt
 llm/

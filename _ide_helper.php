@@ -28359,11 +28359,55 @@ namespace Livewire\Features\SupportTesting {
             }
     }
 
-namespace Filament\Pages {
+namespace App\Filament\Resources\Customers\Pages {
     /**
      */
-    class Dashboard extends \Filament\Pages\Page {
+    class CreateCustomer extends \Filament\Resources\Pages\CreateRecord {
             }
+    /**
+     */
+    class EditCustomer extends \Filament\Resources\Pages\EditRecord {
+            }
+    /**
+     */
+    class ListCustomers extends \Filament\Resources\Pages\ListRecords {
+            }
+    /**
+     */
+    class ViewCustomer extends \Filament\Resources\Pages\ViewRecord {
+            }
+    }
+
+namespace Filament\Resources\Pages {
+    /**
+     * @template TModel of Model = Model
+     * @property-read Schema $form
+     */
+    class CreateRecord extends \Filament\Resources\Pages\Page {
+            }
+    /**
+     */
+    class Page extends \Filament\Pages\Page {
+            }
+    /**
+     * @template TModel of Model = Model
+     * @property-read Schema $form
+     */
+    class EditRecord extends \Filament\Resources\Pages\Page {
+            }
+    /**
+     */
+    class ListRecords extends \Filament\Resources\Pages\Page {
+            }
+    /**
+     * @template TModel of Model = Model
+     * @property-read Schema $form
+     */
+    class ViewRecord extends \Filament\Resources\Pages\Page {
+            }
+    }
+
+namespace Filament\Pages {
     /**
      * @template TConfiguration of PageConfiguration = PageConfiguration
      */
@@ -28375,7 +28419,49 @@ namespace Filament\Pages {
             }
     /**
      */
+    class Dashboard extends \Filament\Pages\Page {
+            }
+    /**
+     */
     class SimplePage extends \Filament\Pages\BasePage {
+            }
+    }
+
+namespace App\Filament\Resources\Organizations\Pages {
+    /**
+     */
+    class CreateOrganization extends \Filament\Resources\Pages\CreateRecord {
+            }
+    /**
+     */
+    class EditOrganization extends \Filament\Resources\Pages\EditRecord {
+            }
+    /**
+     */
+    class ListOrganizations extends \Filament\Resources\Pages\ListRecords {
+            }
+    /**
+     */
+    class ViewOrganization extends \Filament\Resources\Pages\ViewRecord {
+            }
+    }
+
+namespace App\Filament\Resources\Users\Pages {
+    /**
+     */
+    class CreateUser extends \Filament\Resources\Pages\CreateRecord {
+            }
+    /**
+     */
+    class EditUser extends \Filament\Resources\Pages\EditRecord {
+            }
+    /**
+     */
+    class ListUsers extends \Filament\Resources\Pages\ListRecords {
+            }
+    /**
+     */
+    class ViewUser extends \Filament\Resources\Pages\ViewRecord {
             }
     }
 
