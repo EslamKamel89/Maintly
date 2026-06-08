@@ -173,7 +173,7 @@ namespace App\Models{
  * @property \Carbon\CarbonImmutable|null $updated_at
  * @property string|null $two_factor_secret
  * @property string|null $two_factor_recovery_codes
- * @property string|null $two_factor_confirmed_at
+ * @property \Carbon\CarbonImmutable|null $two_factor_confirmed_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\WorkOrderAssignment> $assignedByRecords
  * @property-read int|null $assigned_by_records_count
  * @property-read \App\Models\WorkOrderAssignment|null $pivot
@@ -292,9 +292,12 @@ namespace App\Models{
  * @property int $work_order_id
  * @property int $user_id
  * @property int $assigned_by
- * @property string $assigned_at
+ * @property \Carbon\CarbonImmutable $assigned_at
  * @property \Carbon\CarbonImmutable|null $created_at
  * @property \Carbon\CarbonImmutable|null $updated_at
+ * @property-read \App\Models\User $assignedBy
+ * @property-read \App\Models\User $technician
+ * @property-read \App\Models\WorkOrder $workOrder
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkOrderAssignment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkOrderAssignment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkOrderAssignment query()

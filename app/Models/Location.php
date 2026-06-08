@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Concerns\HasOrganization;
 
 #[Fillable([
     'organization_id',
@@ -21,7 +22,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 ])]
 class Location extends Model {
     /** @use HasFactory<\Database\Factories\LocationFactory> */
-    use HasFactory;
+    use HasFactory, HasOrganization;
     protected function casts(): array {
         return [
             'latitude' => 'decimal:7',
@@ -29,9 +30,7 @@ class Location extends Model {
         ];
     }
 
-    public function organization(): BelongsTo {
-        return $this->belongsTo(Organization::class);
-    }
+
 
 
     public function customer(): BelongsTo {

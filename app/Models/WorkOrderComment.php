@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\Concerns\HasOrganization;
 
 #[Fillable([
     'organization_id',
@@ -15,11 +16,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 ])]
 class WorkOrderComment extends Model {
     /** @use HasFactory<\Database\Factories\WorkOrderCommentFactory> */
-    use HasFactory;
+    use HasFactory, HasOrganization;
 
-    public function organization(): BelongsTo {
-        return $this->belongsTo(Organization::class);
-    }
+
 
     public function workOrder(): BelongsTo {
         return $this->belongsTo(WorkOrder::class);

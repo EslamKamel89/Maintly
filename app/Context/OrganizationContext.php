@@ -6,7 +6,7 @@ use App\Models\Organization;
 
 class OrganizationContext {
 
-    protected static ?Organization $organization;
+    protected static ?Organization $organization = null;
 
     public static function set(Organization $organization) {
         static::$organization = $organization;

@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Concerns\HasOrganization;
 
 #[Fillable([
     'organization_id',
@@ -27,7 +28,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 ])]
 class WorkOrder extends Model {
     /** @use HasFactory<\Database\Factories\WorkOrderFactory> */
-    use HasFactory;
+    use HasFactory, HasOrganization;
 
     protected function casts(): array {
         return [
@@ -40,9 +41,7 @@ class WorkOrder extends Model {
         ];
     }
 
-    public function organization(): BelongsTo {
-        return $this->belongsTo(Organization::class);
-    }
+
 
     public function customer(): BelongsTo {
         return $this->belongsTo(Customer::class);
