@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Http\Middleware\InitializeOrganizationContext;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -19,17 +20,25 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
-class DashboardPanelProvider extends PanelProvider
-{
-    public function panel(Panel $panel): Panel
-    {
+class DashboardPanelProvider extends PanelProvider {
+    public function panel(Panel $panel): Panel {
         return $panel
             ->default()
             ->id('dashboard')
             ->path('dashboard')
             ->login()
             ->colors([
-                'primary' => Color::Amber,
+                // 'primary' => Color::Amber,
+                // 'primary' => Color::Indigo,
+                // 'primary' => Color::Cyan,
+                // 'primary' => Color::Teal,
+                // 'primary' => Color::Violet,
+                'primary' => Color::Orange,
+                'success' => Color::Emerald,
+                'danger' => Color::Rose,
+                'warning' => Color::Amber,
+                'info' => Color::Sky,
+                'gray' => Color::Gray,
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
@@ -51,9 +60,12 @@ class DashboardPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                InitializeOrganizationContext::class,
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])->sidebarCollapsibleOnDesktop(true)
+            ->sidebarWidth('200px')
+            ->spa();
     }
 }

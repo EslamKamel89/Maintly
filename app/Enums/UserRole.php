@@ -8,4 +8,12 @@ enum UserRole: string {
     case Owner = "owner";
     case Manager = 'manager';
     case Technician = "technician";
+    public function label(): string {
+        return match ($this) {
+            self::Admin => 'Admin',
+            self::Owner => 'Owner',
+            self::Manager => 'Manager',
+            self::Technician => 'Technician',
+        };
+    }
 }

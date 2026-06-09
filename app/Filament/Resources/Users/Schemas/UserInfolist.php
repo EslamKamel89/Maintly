@@ -2,41 +2,45 @@
 
 namespace App\Filament\Resources\Users\Schemas;
 
+use App\Enums\UserRole;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
-class UserInfolist
-{
-    public static function configure(Schema $schema): Schema
-    {
+class UserInfolist {
+    public static function configure(Schema $schema): Schema {
         return $schema
             ->components([
-                TextEntry::make('organization.name')
-                    ->label('Organization')
-                    ->placeholder('-'),
-                TextEntry::make('role')
-                    ->badge(),
-                TextEntry::make('name'),
-                TextEntry::make('email')
-                    ->label('Email address'),
-                TextEntry::make('email_verified_at')
-                    ->dateTime()
-                    ->placeholder('-'),
-                TextEntry::make('created_at')
-                    ->dateTime()
-                    ->placeholder('-'),
-                TextEntry::make('updated_at')
-                    ->dateTime()
-                    ->placeholder('-'),
-                TextEntry::make('two_factor_secret')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
-                TextEntry::make('two_factor_recovery_codes')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
-                TextEntry::make('two_factor_confirmed_at')
-                    ->dateTime()
-                    ->placeholder('-'),
+                Section::make('Account Information')
+                    ->schema([
+                        TextEntry::make('organization.name')
+                            ->label('Organization')
+                            ->visible(
+                                fn() => auth()->user()?->isAdmin()
+                            ),
+
+                        TextEntry::make('role')
+                            ->badge()
+                            ->color(fn(UserRole $state): string => match ($state) {
+                                UserRole::Admin => 'danger',
+                                UserRole::Owner => 'warning',
+                                UserRole::Manager => 'info',
+                                UserRole::Technician => 'gray',
+                            }),
+
+                        TextEntry::make('name'),
+
+                        TextEntry::make('email')
+                            ->label('Email Address'),
+                    ])
+                    ->columns(2),
+
+                Section::make('Audit Information')
+                    ->schema([
+                        TextEntry::make('created_at')
+                            ->label('Created')
+                            ->dateTime(),
+                    ]),
             ]);
     }
 }

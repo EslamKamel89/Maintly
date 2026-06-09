@@ -18,11 +18,13 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Override;
+use UnitEnum;
 
 class UserResource extends Resource {
     protected static ?string $model = User::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
+    protected static string | UnitEnum | null $navigationGroup = 'Administration';
 
     protected static ?string $recordTitleAttribute = 'name';
 
@@ -35,6 +37,7 @@ class UserResource extends Resource {
     }
 
     public static function table(Table $table): Table {
+
         return UsersTable::configure($table);
     }
 
