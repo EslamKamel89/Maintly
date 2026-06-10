@@ -7,49 +7,66 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
-class LocationsTable
-{
-    public static function configure(Table $table): Table
-    {
+class LocationsTable {
+    public static function configure(Table $table): Table {
         return $table
             ->columns([
                 TextColumn::make('organization.name')
-                    ->searchable(),
-                TextColumn::make('customer.id')
-                    ->searchable(),
+                    ->label('Organization')
+                    ->searchable()
+                    ->visible(
+                        fn() => auth()->user()?->isAdmin()
+                    ),
+
+                TextColumn::make('customer.company_name')
+                    ->label('Customer')
+                    ->searchable()
+                    ->sortable(),
+
                 TextColumn::make('name')
-                    ->searchable(),
+                    ->label('Location')
+                    ->searchable()
+                    ->sortable(),
+
                 TextColumn::make('city')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable(),
+
                 TextColumn::make('state')
-                    ->searchable(),
-                TextColumn::make('latitude')
-                    ->numeric()
+                    ->searchable()
                     ->sortable(),
-                TextColumn::make('longitude')
-                    ->numeric()
-                    ->sortable(),
+
                 TextColumn::make('created_at')
+                    ->label('Created')
                     ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->sortable(),
             ])
             ->filters([
-                //
+                SelectFilter::make('organization')
+                    ->relationship('organization', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->visible(
+                        fn() => auth()->user()?->isAdmin()
+                    ),
             ])
             ->recordActions([
                 ViewAction::make(),
-                EditAction::make(),
+
+                EditAction::make()
+                    ->disabled(
+                        auth()->user()?->isTechnician()
+                    ),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()
+                        ->disabled(
+                            auth()->user()?->isTechnician()
+                        ),
                 ]),
             ]);
     }

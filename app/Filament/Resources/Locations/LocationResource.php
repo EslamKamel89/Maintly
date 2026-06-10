@@ -15,44 +15,71 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
+use App\Models\User;
+use Filament\Actions\EditAction;
+use Override;
 
-class LocationResource extends Resource
-{
+class LocationResource extends Resource {
     protected static ?string $model = Location::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedMapPin;
+
+    protected static string|UnitEnum|null $navigationGroup = 'Operations';
+
+    protected static ?int $navigationSort = 20;
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    public static function form(Schema $schema): Schema
-    {
+    public static function form(Schema $schema): Schema {
         return LocationForm::configure($schema);
     }
 
-    public static function infolist(Schema $schema): Schema
-    {
+    public static function infolist(Schema $schema): Schema {
         return LocationInfolist::configure($schema);
     }
 
-    public static function table(Table $table): Table
-    {
+    public static function table(Table $table): Table {
         return LocationsTable::configure($table);
     }
 
-    public static function getRelations(): array
-    {
+    public static function getRelations(): array {
         return [
             //
         ];
     }
 
-    public static function getPages(): array
-    {
+    public static function getPages(): array {
         return [
             'index' => ListLocations::route('/'),
             'create' => CreateLocation::route('/create'),
             'view' => ViewLocation::route('/{record}'),
             'edit' => EditLocation::route('/{record}/edit'),
         ];
+    }
+    #[Override]
+    public static function shouldRegisterNavigation(): bool {
+        return auth()->check();
+    }
+    #[Override]
+    public static function canCreate(): bool {
+        /** @var User|null $user */
+        $user = auth()->user();
+
+        return !$user?->isTechnician();
+    }
+    #[Override]
+    public static function canEdit($record): bool {
+        /** @var User|null $user */
+        $user = auth()->user();
+
+        return !$user?->isTechnician();
+    }
+    #[Override]
+    public static function canDelete($record): bool {
+        /** @var User|null $user */
+        $user = auth()->user();
+
+        return !$user?->isTechnician();
     }
 }

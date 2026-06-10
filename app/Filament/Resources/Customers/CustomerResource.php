@@ -23,12 +23,14 @@ class CustomerResource extends Resource {
     protected static ?string $model = Customer::class;
 
 
+
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBuildingOffice2;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Administration';
+    protected static string|UnitEnum|null $navigationGroup = 'Operations';
 
-    protected static ?string $recordTitleAttribute = 'company_name';
-    protected static ?int $navigationSort = 30;
+    protected static ?int $navigationSort = 10;
+
     public static function form(Schema $schema): Schema {
         return CustomerForm::configure($schema);
     }
