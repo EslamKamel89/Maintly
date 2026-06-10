@@ -9,26 +9,25 @@ use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
-class OrganizationsTable
-{
-    public static function configure(Table $table): Table
-    {
+class OrganizationsTable {
+    public static function configure(Table $table): Table {
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->searchable()
+                    ->sortable(),
+
+                TextColumn::make('phone_number')
+                    ->label('Phone')
                     ->searchable(),
+
                 TextColumn::make('address')
                     ->searchable(),
-                TextColumn::make('phone_number')
-                    ->searchable(),
+
                 TextColumn::make('created_at')
+                    ->label('Created')
                     ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->sortable(),
             ])
             ->filters([
                 //
