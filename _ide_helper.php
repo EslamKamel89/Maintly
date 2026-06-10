@@ -28359,22 +28359,22 @@ namespace Livewire\Features\SupportTesting {
             }
     }
 
-namespace App\Filament\Resources\Customers\Pages {
+namespace App\Filament\Resources\Assets\Pages {
     /**
      */
-    class CreateCustomer extends \Filament\Resources\Pages\CreateRecord {
+    class CreateAsset extends \Filament\Resources\Pages\CreateRecord {
             }
     /**
      */
-    class EditCustomer extends \Filament\Resources\Pages\EditRecord {
+    class EditAsset extends \Filament\Resources\Pages\EditRecord {
             }
     /**
      */
-    class ListCustomers extends \Filament\Resources\Pages\ListRecords {
+    class ListAssets extends \Filament\Resources\Pages\ListRecords {
             }
     /**
      */
-    class ViewCustomer extends \Filament\Resources\Pages\ViewRecord {
+    class ViewAsset extends \Filament\Resources\Pages\ViewRecord {
             }
     }
 
@@ -28424,6 +28424,44 @@ namespace Filament\Pages {
     /**
      */
     class SimplePage extends \Filament\Pages\BasePage {
+            }
+    }
+
+namespace App\Filament\Resources\Customers\Pages {
+    /**
+     */
+    class CreateCustomer extends \Filament\Resources\Pages\CreateRecord {
+            }
+    /**
+     */
+    class EditCustomer extends \Filament\Resources\Pages\EditRecord {
+            }
+    /**
+     */
+    class ListCustomers extends \Filament\Resources\Pages\ListRecords {
+            }
+    /**
+     */
+    class ViewCustomer extends \Filament\Resources\Pages\ViewRecord {
+            }
+    }
+
+namespace App\Filament\Resources\Locations\Pages {
+    /**
+     */
+    class CreateLocation extends \Filament\Resources\Pages\CreateRecord {
+            }
+    /**
+     */
+    class EditLocation extends \Filament\Resources\Pages\EditRecord {
+            }
+    /**
+     */
+    class ListLocations extends \Filament\Resources\Pages\ListRecords {
+            }
+    /**
+     */
+    class ViewLocation extends \Filament\Resources\Pages\ViewRecord {
             }
     }
 
