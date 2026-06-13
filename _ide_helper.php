@@ -28446,6 +28446,20 @@ namespace App\Filament\Resources\Customers\Pages {
             }
     }
 
+namespace App\Filament\Resources\Customers\RelationManagers {
+    /**
+     */
+    class LocationsRelationManager extends \Filament\Resources\RelationManagers\RelationManager {
+            }
+    }
+
+namespace Filament\Resources\RelationManagers {
+    /**
+     */
+    class RelationManager extends \Livewire\Component {
+            }
+    }
+
 namespace App\Filament\Resources\Locations\Pages {
     /**
      */
@@ -28462,6 +28476,13 @@ namespace App\Filament\Resources\Locations\Pages {
     /**
      */
     class ViewLocation extends \Filament\Resources\Pages\ViewRecord {
+            }
+    }
+
+namespace App\Filament\Resources\Locations\RelationManagers {
+    /**
+     */
+    class AssetsRelationManager extends \Filament\Resources\RelationManagers\RelationManager {
             }
     }
 
