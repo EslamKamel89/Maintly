@@ -9,12 +9,14 @@ use App\Filament\Resources\Assets\Pages\ViewAsset;
 use App\Filament\Resources\Assets\Schemas\AssetForm;
 use App\Filament\Resources\Assets\Schemas\AssetInfolist;
 use App\Filament\Resources\Assets\Tables\AssetsTable;
+use App\Filament\Resources\Locations\LocationResource;
 use App\Models\Asset;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Override;
 use UnitEnum;
 
 class AssetResource extends Resource {
@@ -27,6 +29,7 @@ class AssetResource extends Resource {
     protected static ?int $navigationSort = 30;
 
     protected static ?string $recordTitleAttribute = 'name';
+    protected static ?string $parentResource = LocationResource::class;
 
     public static function form(Schema $schema): Schema {
         return AssetForm::configure($schema);
@@ -53,5 +56,9 @@ class AssetResource extends Resource {
             'view' => ViewAsset::route('/{record}'),
             'edit' => EditAsset::route('/{record}/edit'),
         ];
+    }
+    #[Override]
+    public static function shouldRegisterNavigation(): bool {
+        return false;
     }
 }

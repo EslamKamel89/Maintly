@@ -31,9 +31,12 @@ class AssetForm {
 
                         Select::make('location_id')
                             ->relationship('location', 'name')
-                            ->searchable()
-                            ->preload()
-                            ->required(),
+                            ->hidden()
+                            ->default(fn() => request()->route('location'))
+                            ->required()
+                            ->dehydrated(),
+                        // ->searchable()
+                        // ->preload()
 
                         TextInput::make('name')
                             ->label('Asset Name')
