@@ -11,13 +11,13 @@ trait HasOrganization {
 
     protected static function bootHasOrganization(): void {
         static::addGlobalScope(new OrganizationScope);
-
         static::creating(function ($model) {
+            $organization_id  = auth()->user()?->organization_id;
             if (
                 $model->organization_id === null &&
-                OrganizationContext::id() !== null
+                $organization_id !== null
             ) {
-                $model->organization_id = OrganizationContext::id();
+                $model->organization_id = $organization_id;
             }
         });
     }

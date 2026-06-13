@@ -80,10 +80,16 @@ class UserResource extends Resource {
     public static function getEloquentQuery(): Builder {
         /** @var User|null $user */
         $user = auth()->user();
+
         $query = parent::getEloquentQuery();
+
         if ($user?->isAdmin()) {
             return $query;
         }
-        return $query->where('organization_id', OrganizationContext::id());
+
+        return $query->where(
+            'organization_id',
+            $user->organization_id,
+        );
     }
 }

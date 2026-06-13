@@ -11,13 +11,19 @@ use Illuminate\Database\Eloquent\Scope;
 class OrganizationScope implements Scope {
 
     public function apply(Builder $builder, Model $model): void {
-        $organizationId = OrganizationContext::id();
-        if ($organizationId == null) {
+        $user = auth()->user();
+
+        if (! $user) {
             return;
         }
+
+        if ($user->isAdmin()) {
+            return;
+        }
+
         $builder->where(
             $model->qualifyColumn('organization_id'),
-            $organizationId,
+            $user->organization_id,
         );
     }
 }
