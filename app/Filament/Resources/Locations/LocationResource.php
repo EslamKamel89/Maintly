@@ -2,10 +2,13 @@
 
 namespace App\Filament\Resources\Locations;
 
+use App\Filament\Resources\Customers\CustomerResource;
+use App\Filament\Resources\Customers\RelationManagers\LocationsRelationManager;
 use App\Filament\Resources\Locations\Pages\CreateLocation;
 use App\Filament\Resources\Locations\Pages\EditLocation;
 use App\Filament\Resources\Locations\Pages\ListLocations;
 use App\Filament\Resources\Locations\Pages\ViewLocation;
+use App\Filament\Resources\Locations\RelationManagers\AssetsRelationManager;
 use App\Filament\Resources\Locations\Schemas\LocationForm;
 use App\Filament\Resources\Locations\Schemas\LocationInfolist;
 use App\Filament\Resources\Locations\Tables\LocationsTable;
@@ -17,14 +20,14 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use UnitEnum;
 use App\Models\User;
-use Filament\Actions\EditAction;
+
 use Override;
 
 class LocationResource extends Resource {
     protected static ?string $model = Location::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedMapPin;
-
+    protected static ?string $parentResource = CustomerResource::class;
     protected static string|UnitEnum|null $navigationGroup = 'Operations';
 
     protected static ?int $navigationSort = 20;
@@ -45,7 +48,7 @@ class LocationResource extends Resource {
 
     public static function getRelations(): array {
         return [
-            //
+            AssetsRelationManager::class,
         ];
     }
 
@@ -59,7 +62,8 @@ class LocationResource extends Resource {
     }
     #[Override]
     public static function shouldRegisterNavigation(): bool {
-        return auth()->check();
+        // return auth()->check();
+        return false;
     }
     #[Override]
     public static function canCreate(): bool {

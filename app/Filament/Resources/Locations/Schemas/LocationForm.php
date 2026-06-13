@@ -26,14 +26,16 @@ class LocationForm {
                                 fn() => auth()->user()?->isAdmin()
                                     ? null
                                     : OrganizationContext::id()
-                            )
-                            ->dehydrated(),
+                            )->dehydrated(),
 
                         Select::make('customer_id')
                             ->relationship('customer', 'company_name')
-                            ->searchable()
-                            ->preload()
-                            ->required(),
+                            ->default(fn() => request()->route('customer'))
+                            ->hidden()
+                            ->required()
+                            ->dehydrated(),
+                        // ->searchable()
+                        // ->preload()
 
                         TextInput::make('name')
                             ->label('Location Name')
