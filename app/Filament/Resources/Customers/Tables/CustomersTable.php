@@ -42,6 +42,7 @@ class CustomersTable {
                     ->dateTime()
                     ->sortable(),
             ])
+            ->stackedOnMobile()
             ->filters([
                 SelectFilter::make('organization')
                     ->relationship('organization', 'name')

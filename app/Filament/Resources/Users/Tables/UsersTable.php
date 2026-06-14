@@ -48,6 +48,7 @@ class UsersTable {
                     ->dateTime()
                     ->sortable(),
             ])
+            ->stackedOnMobile()
             ->filters([
                 SelectFilter::make('role')
                     ->options(

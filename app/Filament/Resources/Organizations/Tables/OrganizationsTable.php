@@ -29,6 +29,7 @@ class OrganizationsTable {
                     ->dateTime()
                     ->sortable(),
             ])
+            ->stackedOnMobile()
             ->filters([
                 //
             ])

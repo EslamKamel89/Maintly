@@ -44,6 +44,7 @@ class LocationsTable {
                     ->dateTime()
                     ->sortable(),
             ])
+            ->stackedOnMobile()
             ->filters([
                 SelectFilter::make('organization')
                     ->relationship('organization', 'name')

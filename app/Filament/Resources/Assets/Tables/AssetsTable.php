@@ -49,6 +49,7 @@ class AssetsTable {
                     ->dateTime()
                     ->sortable(),
             ])
+            ->stackedOnMobile()
             ->filters([
                 SelectFilter::make('organization')
                     ->relationship('organization', 'name')
