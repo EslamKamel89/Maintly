@@ -13,5 +13,5 @@ return [
     ],
 
     'sync_record_attributes' => true,
-    'default_map_center' => [-14.235, -51.9253],
+    'default_map_center' => [25.2048, 55.2708],
 ];
