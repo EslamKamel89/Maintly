@@ -2,54 +2,101 @@
 
 namespace App\Filament\Resources\WorkOrderAttachments\Tables;
 
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Storage;
 
-class WorkOrderAttachmentsTable
-{
-    public static function configure(Table $table): Table
-    {
+class WorkOrderAttachmentsTable {
+    public static function configure(Table $table): Table {
         return $table
             ->columns([
                 TextColumn::make('organization.name')
-                    ->searchable(),
+                    ->label('Organization')
+                    ->searchable()
+                    ->visible(
+                        fn() => auth()->user()?->isAdmin()
+                    ),
+
                 TextColumn::make('workOrder.title')
-                    ->searchable(),
-                TextColumn::make('uploaded_by')
-                    ->numeric()
+                    ->label('Work Order')
+                    ->searchable()
                     ->sortable(),
-                TextColumn::make('path')
-                    ->searchable(),
+
+                TextColumn::make('uploader.name')
+                    ->label('Uploaded By')
+                    ->searchable()
+                    ->sortable(),
+
                 TextColumn::make('file_name')
-                    ->searchable(),
+                    ->label('File Name')
+                    ->searchable()
+                    ->sortable()
+                    ->url(fn($record) => Storage::url($record->path))
+                    ->openUrlInNewTab(),
+
                 TextColumn::make('mime_type')
-                    ->searchable(),
+                    ->label('File Type')
+                    ->searchable()
+                    ->sortable(),
+
                 TextColumn::make('file_size')
+                    ->label('Size')
                     ->numeric()
                     ->sortable(),
+
                 TextColumn::make('created_at')
+                    ->label('Uploaded')
                     ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->sortable(),
             ])
+            ->stackedOnMobile()
             ->filters([
-                //
+                SelectFilter::make('organization')
+                    ->relationship('organization', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->visible(
+                        fn() => auth()->user()?->isAdmin()
+                    ),
+
+                SelectFilter::make('workOrder')
+                    ->relationship('workOrder', 'title')
+                    ->searchable()
+                    ->preload(),
+
+                SelectFilter::make('mime_type')
+                    ->options(
+                        fn() => \App\Models\WorkOrderAttachment::query()
+                            ->distinct()
+                            ->pluck('mime_type', 'mime_type')
+                            ->toArray()
+                    ),
             ])
             ->recordActions([
                 ViewAction::make(),
-                EditAction::make(),
+                Action::make('download')
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->url(
+                        fn($record) => Storage::url($record->path)
+                    )
+                    ->openUrlInNewTab(),
+                // EditAction::make()
+                //     ->disabled(
+                //         auth()->user()?->isTechnician()
+                //     ),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()
+                        ->disabled(
+                            auth()->user()?->isTechnician()
+                        ),
                 ]),
             ]);
     }
