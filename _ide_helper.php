@@ -28596,6 +28596,10 @@ namespace App\Filament\Resources\WorkOrders\RelationManagers {
      */
     class WorkOrderAttachmentsRelationManager extends \Filament\Resources\RelationManagers\RelationManager {
             }
+    /**
+     */
+    class WorkOrderCommentsRelationManager extends \Filament\Resources\RelationManagers\RelationManager {
+            }
     }
 
 namespace Filament\Auth\Pages {
