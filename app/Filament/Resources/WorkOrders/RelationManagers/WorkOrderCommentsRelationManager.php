@@ -2,15 +2,15 @@
 
 namespace App\Filament\Resources\WorkOrders\RelationManagers;
 
-use App\Filament\Resources\WorkOrderAttachments\WorkOrderAttachmentResource;
+use App\Filament\Resources\WorkOrderComments\WorkOrderCommentResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Table;
 
-class WorkOrderAttachmentsRelationManager extends RelationManager {
-    protected static string $relationship = 'attachments';
-    protected static ?string $title = 'Attachments';
-    protected static ?string $relatedResource = WorkOrderAttachmentResource::class;
+class WorkOrderCommentsRelationManager extends RelationManager {
+    protected static string $relationship = 'comments';
+    protected static ?string $title = 'Comments';
+    protected static ?string $relatedResource = WorkOrderCommentResource::class;
 
     public function table(Table $table): Table {
         return $table

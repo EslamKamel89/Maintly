@@ -14,32 +14,32 @@ class WorkOrderCommentsTable {
     public static function configure(Table $table): Table {
         return $table
             ->columns([
-                TextColumn::make('organization.name')
-                    ->label('Organization')
-                    ->searchable()
-                    ->visible(
-                        fn() => auth()->user()?->isAdmin()
-                    ),
-
-                TextColumn::make('workOrder.title')
-                    ->label('Work Order')
-                    ->searchable()
-                    ->sortable(),
-
-                TextColumn::make('user.name')
-                    ->label('Author')
-                    ->searchable()
-                    ->sortable(),
-
                 TextColumn::make('comment')
                     ->label('Comment')
                     ->limit(80)
                     ->searchable(),
 
+                TextColumn::make('organization.name')
+                    ->label('Organization')
+                    ->searchable()
+                    ->visible(
+                        fn() => auth()->user()?->isAdmin()
+                    )->toggleable(isToggledHiddenByDefault: true),
+
+                TextColumn::make('workOrder.title')
+                    ->label('Work Order')
+                    ->searchable()
+                    ->sortable()->toggleable(isToggledHiddenByDefault: true),
+
+                TextColumn::make('user.name')
+                    ->label('Author')
+                    ->searchable()
+                    ->sortable()->toggleable(false, isToggledHiddenByDefault: false),
+
                 TextColumn::make('created_at')
                     ->label('Created')
                     ->dateTime()
-                    ->sortable(),
+                    ->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
             ->stackedOnMobile()
             ->filters([
@@ -64,17 +64,11 @@ class WorkOrderCommentsTable {
             ->recordActions([
                 ViewAction::make(),
 
-                EditAction::make()
-                    ->disabled(
-                        auth()->user()?->isTechnician()
-                    ),
+                EditAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make()
-                        ->disabled(
-                            auth()->user()?->isTechnician()
-                        ),
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }

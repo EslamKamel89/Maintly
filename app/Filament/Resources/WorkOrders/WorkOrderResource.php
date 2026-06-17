@@ -7,6 +7,7 @@ use App\Filament\Resources\WorkOrders\Pages\EditWorkOrder;
 use App\Filament\Resources\WorkOrders\Pages\ListWorkOrders;
 use App\Filament\Resources\WorkOrders\Pages\ViewWorkOrder;
 use App\Filament\Resources\WorkOrders\RelationManagers\WorkOrderAttachmentsRelationManager;
+use App\Filament\Resources\WorkOrders\RelationManagers\WorkOrderCommentsRelationManager;
 use App\Filament\Resources\WorkOrders\Schemas\WorkOrderForm;
 use App\Filament\Resources\WorkOrders\Schemas\WorkOrderInfolist;
 use App\Filament\Resources\WorkOrders\Tables\WorkOrdersTable;
@@ -44,6 +45,7 @@ class WorkOrderResource extends Resource {
     public static function getRelations(): array {
         return [
             WorkOrderAttachmentsRelationManager::class,
+            WorkOrderCommentsRelationManager::class,
         ];
     }
 

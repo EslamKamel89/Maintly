@@ -96,4 +96,8 @@ class WorkOrder extends Model {
     public function workOrderAttachments(): HasMany {
         return $this->hasMany(WorkOrderAttachment::class);
     }
+
+    public function workOrderComments(): HasMany {
+        return $this->hasMany(WorkOrderComment::class);
+    }
 }

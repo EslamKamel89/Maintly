@@ -9,6 +9,7 @@ use App\Filament\Resources\WorkOrderComments\Pages\ViewWorkOrderComment;
 use App\Filament\Resources\WorkOrderComments\Schemas\WorkOrderCommentForm;
 use App\Filament\Resources\WorkOrderComments\Schemas\WorkOrderCommentInfolist;
 use App\Filament\Resources\WorkOrderComments\Tables\WorkOrderCommentsTable;
+use App\Filament\Resources\WorkOrders\WorkOrderResource;
 use App\Models\User;
 use App\Models\WorkOrderComment;
 use BackedEnum;
@@ -17,16 +18,13 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Override;
-use UnitEnum;
 
 class WorkOrderCommentResource extends Resource {
     protected static ?string $model = WorkOrderComment::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Operations';
-
-    protected static ?int $navigationSort = 60;
+    protected static ?string $parentResource = WorkOrderResource::class;
 
     public static function form(Schema $schema): Schema {
         return WorkOrderCommentForm::configure($schema);
@@ -57,7 +55,7 @@ class WorkOrderCommentResource extends Resource {
 
     #[Override]
     public static function shouldRegisterNavigation(): bool {
-        return auth()->check();
+        return false;
     }
 
     #[Override]
