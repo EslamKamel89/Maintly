@@ -28534,6 +28534,70 @@ namespace App\Filament\Resources\Users\Pages {
             }
     }
 
+namespace App\Filament\Resources\WorkOrderAttachments\Pages {
+    /**
+     */
+    class CreateWorkOrderAttachment extends \Filament\Resources\Pages\CreateRecord {
+            }
+    /**
+     */
+    class EditWorkOrderAttachment extends \Filament\Resources\Pages\EditRecord {
+            }
+    /**
+     */
+    class ListWorkOrderAttachments extends \Filament\Resources\Pages\ListRecords {
+            }
+    /**
+     */
+    class ViewWorkOrderAttachment extends \Filament\Resources\Pages\ViewRecord {
+            }
+    }
+
+namespace App\Filament\Resources\WorkOrderComments\Pages {
+    /**
+     */
+    class CreateWorkOrderComment extends \Filament\Resources\Pages\CreateRecord {
+            }
+    /**
+     */
+    class EditWorkOrderComment extends \Filament\Resources\Pages\EditRecord {
+            }
+    /**
+     */
+    class ListWorkOrderComments extends \Filament\Resources\Pages\ListRecords {
+            }
+    /**
+     */
+    class ViewWorkOrderComment extends \Filament\Resources\Pages\ViewRecord {
+            }
+    }
+
+namespace App\Filament\Resources\WorkOrders\Pages {
+    /**
+     */
+    class CreateWorkOrder extends \Filament\Resources\Pages\CreateRecord {
+            }
+    /**
+     */
+    class EditWorkOrder extends \Filament\Resources\Pages\EditRecord {
+            }
+    /**
+     */
+    class ListWorkOrders extends \Filament\Resources\Pages\ListRecords {
+            }
+    /**
+     */
+    class ViewWorkOrder extends \Filament\Resources\Pages\ViewRecord {
+            }
+    }
+
+namespace App\Filament\Resources\WorkOrders\RelationManagers {
+    /**
+     */
+    class WorkOrderAttachmentsRelationManager extends \Filament\Resources\RelationManagers\RelationManager {
+            }
+    }
+
 namespace Filament\Auth\Pages {
     /**
      * @property-read Action $registerAction
