@@ -92,4 +92,8 @@ class WorkOrder extends Model {
     public function attachments(): HasMany {
         return $this->hasMany(WorkOrderAttachment::class);
     }
+    // i added this method because there is a fault in filament that require the default relation name
+    public function workOrderAttachments(): HasMany {
+        return $this->hasMany(WorkOrderAttachment::class);
+    }
 }

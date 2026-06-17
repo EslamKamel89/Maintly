@@ -2,10 +2,9 @@
 
 namespace App\Filament\Resources\Locations\Schemas;
 
-use App\Context\OrganizationContext;
-use EduardoRibeiroDev\FilamentLeaflet\Fields\MapPicker;
+use App\Models\Customer;
 use Filament\Actions\Action;
-use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Components\Section;
@@ -17,26 +16,34 @@ class LocationForm {
             ->components([
                 Section::make('Location Information')
                     ->schema([
-                        Select::make('organization_id')
-                            ->relationship('organization', 'name')
-                            ->searchable()
-                            ->preload()
-                            ->visible(
-                                fn() => auth()->user()?->isAdmin()
-                            )
-                            ->default(
-                                fn() => auth()->user()?->isAdmin()
-                                    ? null
-                                    : OrganizationContext::id()
-                            )
-                            ->dehydrated(),
+                        // Select::make('organization_id')
+                        //     ->relationship('organization', 'name')
+                        //     ->searchable()
+                        //     ->preload()
+                        //     ->visible(
+                        //         fn() => auth()->user()?->isAdmin()
+                        //     )
+                        //     ->default(
+                        //         fn() => auth()->user()?->isAdmin()
+                        //             ? null
+                        //             : auth()->user()->organization_id
+                        //     )
+                        //     ->dehydrated(),
 
-                        Select::make('customer_id')
-                            ->relationship('customer', 'company_name')
-                            ->default(fn() => request()->route('customer'))
-                            ->hidden()
-                            ->required()
-                            ->dehydrated(),
+                        // Select::make('customer_id')
+                        //     ->relationship('customer', 'company_name')
+                        //     ->default(fn() => request()->route('customer'))
+                        //     ->hidden()
+                        //     ->required()
+                        //     ->dehydrated(),
+                        Hidden::make('customer_id')
+                            ->default(fn() => request()->route('customer')),
+                        Hidden::make('organization_id')
+                            ->default(function () {
+                                $customerId = request()->route('customer');
+                                $customer = Customer::findOrFail($customerId);
+                                return $customer->organization_id;
+                            }),
 
                         TextInput::make('name')
                             ->label('Location Name')

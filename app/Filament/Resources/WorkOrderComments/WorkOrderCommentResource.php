@@ -9,50 +9,78 @@ use App\Filament\Resources\WorkOrderComments\Pages\ViewWorkOrderComment;
 use App\Filament\Resources\WorkOrderComments\Schemas\WorkOrderCommentForm;
 use App\Filament\Resources\WorkOrderComments\Schemas\WorkOrderCommentInfolist;
 use App\Filament\Resources\WorkOrderComments\Tables\WorkOrderCommentsTable;
+use App\Models\User;
 use App\Models\WorkOrderComment;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Override;
+use UnitEnum;
 
-class WorkOrderCommentResource extends Resource
-{
+class WorkOrderCommentResource extends Resource {
     protected static ?string $model = WorkOrderComment::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $recordTitleAttribute = 'comment';
+    protected static string|UnitEnum|null $navigationGroup = 'Operations';
 
-    public static function form(Schema $schema): Schema
-    {
+    protected static ?int $navigationSort = 60;
+
+    public static function form(Schema $schema): Schema {
         return WorkOrderCommentForm::configure($schema);
     }
 
-    public static function infolist(Schema $schema): Schema
-    {
+    public static function infolist(Schema $schema): Schema {
         return WorkOrderCommentInfolist::configure($schema);
     }
 
-    public static function table(Table $table): Table
-    {
+    public static function table(Table $table): Table {
         return WorkOrderCommentsTable::configure($table);
     }
 
-    public static function getRelations(): array
-    {
+    public static function getRelations(): array {
         return [
             //
         ];
     }
 
-    public static function getPages(): array
-    {
+    public static function getPages(): array {
         return [
             'index' => ListWorkOrderComments::route('/'),
             'create' => CreateWorkOrderComment::route('/create'),
             'view' => ViewWorkOrderComment::route('/{record}'),
             'edit' => EditWorkOrderComment::route('/{record}/edit'),
         ];
+    }
+
+    #[Override]
+    public static function shouldRegisterNavigation(): bool {
+        return auth()->check();
+    }
+
+    #[Override]
+    public static function canCreate(): bool {
+        /** @var User|null $user */
+        $user = auth()->user();
+
+        return !$user?->isTechnician();
+    }
+
+    #[Override]
+    public static function canEdit($record): bool {
+        /** @var User|null $user */
+        $user = auth()->user();
+
+        return !$user?->isTechnician();
+    }
+
+    #[Override]
+    public static function canDelete($record): bool {
+        /** @var User|null $user */
+        $user = auth()->user();
+
+        return !$user?->isTechnician();
     }
 }

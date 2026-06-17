@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Concerns\HasOrganization;
+use Illuminate\Support\Facades\Storage;
 
 #[Fillable([
     'organization_id',
@@ -20,7 +21,16 @@ use App\Models\Concerns\HasOrganization;
 class WorkOrderAttachment extends Model {
     /** @use HasFactory<\Database\Factories\WorkOrderAttachmentFactory> */
     use HasFactory, HasOrganization;
+    protected static function booted(): void {
 
+        static::deleting(function (WorkOrderAttachment $attachment) {
+            if ($attachment->path) {
+                Storage::disk('public')->delete(
+                    $attachment->path
+                );
+            }
+        });
+    }
     protected function casts(): array {
         return [
             'file_size' => 'integer',

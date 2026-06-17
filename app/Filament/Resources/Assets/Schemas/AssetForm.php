@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\Assets\Schemas;
 
-use App\Context\OrganizationContext;
-use Filament\Forms\Components\Select;
+use App\Models\Location;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Components\Section;
@@ -15,29 +15,36 @@ class AssetForm {
             ->components([
                 Section::make('Asset Information')
                     ->schema([
-                        Select::make('organization_id')
-                            ->relationship('organization', 'name')
-                            ->searchable()
-                            ->preload()
-                            ->visible(
-                                fn() => auth()->user()?->isAdmin()
-                            )
-                            ->default(
-                                fn() => auth()->user()?->isAdmin()
-                                    ? null
-                                    : OrganizationContext::id()
-                            )
-                            ->dehydrated(),
+                        // Select::make('organization_id')
+                        //     ->relationship('organization', 'name')
+                        //     ->searchable()
+                        //     ->preload()
+                        //     ->visible(
+                        //         fn() => auth()->user()?->isAdmin()
+                        //     )
+                        //     ->default(
+                        //         fn() => auth()->user()?->isAdmin()
+                        //             ? null
+                        //             : auth()->user()->organization_id
+                        //     )
+                        //     ->dehydrated(),
 
-                        Select::make('location_id')
-                            ->relationship('location', 'name')
-                            ->hidden()
-                            ->default(fn() => request()->route('location'))
-                            ->required()
-                            ->dehydrated(),
+                        // Select::make('location_id')
+                        //     ->relationship('location', 'name')
+                        //     ->hidden()
+                        //     ->default(fn() => request()->route('location'))
+                        //     ->required()
+                        //     ->dehydrated(),
                         // ->searchable()
                         // ->preload()
-
+                        Hidden::make('location_id')
+                            ->default(fn() => request()->route('location')),
+                        Hidden::make('organization_id')
+                            ->default(function () {
+                                $locationId = request()->route('location');
+                                $location = Location::findOrFail($locationId);
+                                return $location->organization_id;
+                            }),
                         TextInput::make('name')
                             ->label('Asset Name')
                             ->required()

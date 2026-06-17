@@ -65,7 +65,7 @@ class DashboardPanelProvider extends PanelProvider {
             ->authMiddleware([
                 Authenticate::class,
             ])->sidebarCollapsibleOnDesktop(true)
-            ->sidebarWidth('200px')
+            ->sidebarWidth('fit-content')
             ->spa();
     }
 }

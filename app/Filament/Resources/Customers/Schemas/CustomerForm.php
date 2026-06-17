@@ -25,7 +25,7 @@ class CustomerForm {
                             ->default(
                                 fn() => auth()->user()?->isAdmin()
                                     ? null
-                                    : OrganizationContext::id()
+                                    : auth()->user()->organization_id
                             )->dehydrated(),
 
                         TextInput::make('company_name')

@@ -26,7 +26,7 @@ class UserForm {
                             ->default(
                                 fn() => auth()->user()?->isAdmin()
                                     ? null
-                                    : OrganizationContext::id()
+                                    : auth()->user()->organization_id
                             ),
 
                         Select::make('role')
