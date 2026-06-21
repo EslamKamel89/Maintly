@@ -28602,6 +28602,51 @@ namespace App\Filament\Resources\WorkOrders\RelationManagers {
             }
     }
 
+namespace App\Filament\Pages {
+    /**
+     */
+    class Dashboard extends \Filament\Pages\Dashboard {
+            }
+    }
+
+namespace App\Filament\Widgets {
+    /**
+     */
+    class WorkOrderCompletionTrendWidget extends \Filament\Widgets\ChartWidget {
+            }
+    /**
+     */
+    class WorkOrderCreationTrendWidget extends \Filament\Widgets\ChartWidget {
+            }
+    /**
+     */
+    class WorkOrderPriorityChartWidget extends \Filament\Widgets\ChartWidget {
+            }
+    /**
+     */
+    class WorkOrderStatsWidget extends \Filament\Widgets\StatsOverviewWidget {
+            }
+    /**
+     */
+    class WorkOrderStatusChartWidget extends \Filament\Widgets\ChartWidget {
+            }
+    }
+
+namespace Filament\Widgets {
+    /**
+     */
+    class ChartWidget extends \Filament\Widgets\Widget {
+            }
+    /**
+     */
+    class Widget extends \Livewire\Component {
+            }
+    /**
+     */
+    class StatsOverviewWidget extends \Filament\Widgets\Widget {
+            }
+    }
+
 namespace Filament\Auth\Pages {
     /**
      * @property-read Action $registerAction
