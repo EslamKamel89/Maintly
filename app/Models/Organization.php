@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\OrganizationFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,34 +14,48 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'phone_number',
     'description',
 ])]
-class Organization extends Model {
-    /** @use HasFactory<\Database\Factories\OrganizationFactory> */
+class Organization extends Model
+{
+    /** @use HasFactory<OrganizationFactory> */
     use HasFactory;
-    public function users(): HasMany {
+
+    public function users(): HasMany
+    {
         return $this->hasMany(User::class);
     }
 
-    public function customers(): HasMany {
+    public function customers(): HasMany
+    {
         return $this->hasMany(Customer::class);
     }
 
-    public function locations(): HasMany {
+    public function locations(): HasMany
+    {
         return $this->hasMany(Location::class);
     }
 
-    public function assets(): HasMany {
+    public function assets(): HasMany
+    {
         return $this->hasMany(Asset::class);
     }
 
-    public function workOrders(): HasMany {
+    public function workOrders(): HasMany
+    {
         return $this->hasMany(WorkOrder::class);
     }
 
-    public function comments(): HasMany {
+    public function comments(): HasMany
+    {
         return $this->hasMany(WorkOrderComment::class);
     }
 
-    public function workOrderAttachments(): HasMany {
+    public function workOrderAttachments(): HasMany
+    {
         return $this->hasMany(WorkOrderAttachment::class);
+    }
+
+    public function userLocations(): HasMany
+    {
+        return $this->hasMany(UserLocation::class);
     }
 }

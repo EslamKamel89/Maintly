@@ -28515,6 +28515,25 @@ namespace App\Filament\Resources\Organizations\Pages {
             }
     }
 
+namespace App\Filament\Resources\UserLocations\Pages {
+    /**
+     */
+    class CreateUserLocation extends \Filament\Resources\Pages\CreateRecord {
+            }
+    /**
+     */
+    class EditUserLocation extends \Filament\Resources\Pages\EditRecord {
+            }
+    /**
+     */
+    class ListUserLocations extends \Filament\Resources\Pages\ListRecords {
+            }
+    /**
+     */
+    class ViewUserLocation extends \Filament\Resources\Pages\ViewRecord {
+            }
+    }
+
 namespace App\Filament\Resources\Users\Pages {
     /**
      */
