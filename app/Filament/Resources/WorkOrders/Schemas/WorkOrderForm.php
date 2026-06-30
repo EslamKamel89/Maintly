@@ -8,22 +8,23 @@ use App\Enums\WorkOrderStatus;
 use App\Models\Asset;
 use App\Models\Customer;
 use App\Models\Location;
-use App\Models\User;
+use App\Support\TechnicianLocator;
 use Filament\Actions\Action;
-use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
-use Filament\Schemas\Components\Tabs;
-use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Builder;
 
-class WorkOrderForm {
-    public static function configure(Schema $schema): Schema {
+class WorkOrderForm
+{
+    public static function configure(Schema $schema): Schema
+    {
         return $schema
             ->components([
                 Tabs::make('Work Order')
@@ -36,10 +37,10 @@ class WorkOrderForm {
                                     ->searchable()
                                     ->preload()
                                     ->visible(
-                                        fn() => auth()->user()?->isAdmin()
+                                        fn () => auth()->user()?->isAdmin()
                                     )
                                     ->default(
-                                        fn() => auth()->user()?->isAdmin()
+                                        fn () => auth()->user()?->isAdmin()
                                             ? null
                                             : auth()->user()->organization_id
                                     )
@@ -59,12 +60,12 @@ class WorkOrderForm {
                                 Select::make('customer_id')
                                     ->label('Customer')
                                     ->disabled(
-                                        fn(Get $get) => blank($get('organization_id'))
+                                        fn (Get $get) => blank($get('organization_id'))
                                     )
                                     ->options(function (Get $get) {
                                         $organizationId = $get('organization_id');
 
-                                        if (!$organizationId) {
+                                        if (! $organizationId) {
                                             return [];
                                         }
 
@@ -81,7 +82,6 @@ class WorkOrderForm {
                                         $set('location_id', null);
                                         $set('assets', []);
                                     }),
-
 
                                 Select::make('status')
                                     ->options(WorkOrderStatus::class)
@@ -105,12 +105,12 @@ class WorkOrderForm {
                                     ->label('Location')
                                     ->helperText('You have to select the customer first')
                                     ->disabled(
-                                        fn(Get $get) => blank($get('customer_id'))
+                                        fn (Get $get) => blank($get('customer_id'))
                                     )
                                     ->options(function (Get $get) {
                                         $customerId = $get('customer_id');
 
-                                        if (!$customerId) {
+                                        if (! $customerId) {
                                             return [];
                                         }
 
@@ -139,7 +139,7 @@ class WorkOrderForm {
                                         ) {
                                             $locationId = $get('location_id');
 
-                                            if (!$locationId) {
+                                            if (! $locationId) {
                                                 $query->whereRaw('1 = 0');
 
                                                 return;
@@ -152,7 +152,7 @@ class WorkOrderForm {
                                         }
                                     )
                                     ->disabled(
-                                        fn(Get $get) => blank($get('location_id'))
+                                        fn (Get $get) => blank($get('location_id'))
                                     )
                                     ->multiple()
                                     ->searchable()
@@ -163,7 +163,9 @@ class WorkOrderForm {
                                             ->label('Select All')
                                             ->action(function (Get $get, Set $set) {
                                                 $locationId = $get('location_id');
-                                                if (!$locationId) return;
+                                                if (! $locationId) {
+                                                    return;
+                                                }
                                                 $assetIds = Asset::query()
                                                     ->where('location_id', $locationId)
                                                     ->pluck('id');
@@ -173,9 +175,11 @@ class WorkOrderForm {
 
                                 Select::make('technicians')
                                     ->label('Assigned Technicians')
-
+                                    ->helperText(
+                                        'Technicians are sorted by nearest distance and freshest location.'
+                                    )
                                     ->disabled(
-                                        fn(Get $get) => blank($get('organization_id'))
+                                        fn (Get $get) => blank($get('location_id'))
                                     )
                                     ->multiple()
                                     ->searchable()
@@ -183,43 +187,42 @@ class WorkOrderForm {
                                     ->relationship(
                                         name: 'technicians',
                                         titleAttribute: 'name',
-                                        modifyQueryUsing: function (
-                                            Builder $query,
-                                            Get $get
-                                        ) {
+                                        modifyQueryUsing: function (Builder $query, Get $get) {
                                             $organizationId = $get('organization_id');
-
-                                            if (!$organizationId) {
+                                            if (! $organizationId) {
                                                 $query->whereRaw('1 = 0');
 
                                                 return;
                                             }
-
-                                            $query
-                                                ->where(
-                                                    'organization_id',
-                                                    $organizationId
-                                                )
-                                                ->where(
-                                                    'role',
-                                                    UserRole::Technician
-                                                );
+                                            $query->where('organization_id', $organizationId)
+                                                ->where('role', UserRole::Technician);
                                         }
                                     )
                                     ->pivotData([
                                         'assigned_by' => auth()->id(),
                                         'assigned_at' => now(),
-                                    ]),
+                                    ])
+                                    ->options(function (Get $get): array {
+                                        $organizationId = $get('organization_id');
+                                        $locationId = $get('location_id');
+
+                                        if (! $organizationId || ! $locationId) {
+                                            return [];
+                                        }
+
+                                        return TechnicianLocator::buildOptionsForLocation(
+                                            organizationId: $organizationId,
+                                            locationId: $locationId,
+                                        );
+                                    }),
+
                             ]),
 
                         Tab::make('Scheduling')
                             ->schema([
                                 DateTimePicker::make('scheduled_at'),
-
                                 DateTimePicker::make('due_at'),
-
                                 DateTimePicker::make('started_at'),
-
                                 DateTimePicker::make('completed_at'),
                             ])
                             ->columns(2),
