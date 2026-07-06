@@ -2,14 +2,17 @@
 
 namespace App\Filament\Resources\WorkOrderAttachments\Schemas;
 
+use App\Enums\WorkOrderAttachmentType;
 use Filament\Actions\Action;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Storage;
 
-class WorkOrderAttachmentInfolist {
-    public static function configure(Schema $schema): Schema {
+class WorkOrderAttachmentInfolist
+{
+    public static function configure(Schema $schema): Schema
+    {
         return $schema
             ->components([
                 Section::make('Attachment Information')
@@ -22,6 +25,18 @@ class WorkOrderAttachmentInfolist {
 
                         TextEntry::make('uploader.name')
                             ->label('Uploaded By'),
+                        TextEntry::make('type')
+                            ->badge()
+                            ->formatStateUsing(
+                                fn (WorkOrderAttachmentType $state) => $state->getLabel()
+                            )
+                            ->color(
+                                fn (WorkOrderAttachmentType $state): string => match ($state) {
+                                    WorkOrderAttachmentType::Before => 'warning',
+                                    WorkOrderAttachmentType::After => 'success',
+                                    WorkOrderAttachmentType::General => 'gray',
+                                }
+                            ),
 
                         TextEntry::make('file_name')
                             ->label('File Name'),
@@ -32,6 +47,9 @@ class WorkOrderAttachmentInfolist {
                         TextEntry::make('file_size')
                             ->label('File Size')
                             ->numeric(),
+                        TextEntry::make('notes')
+                            ->placeholder('-')
+                            ->columnSpanFull(),
                     ])
                     ->columns(2),
 
@@ -42,7 +60,7 @@ class WorkOrderAttachmentInfolist {
                         Action::make('download')
                             ->icon('heroicon-o-arrow-down-tray')
                             ->url(
-                                fn($record) => Storage::url($record->path)
+                                fn ($record) => Storage::url($record->path)
                             )
                             ->openUrlInNewTab(),
                     ]),
