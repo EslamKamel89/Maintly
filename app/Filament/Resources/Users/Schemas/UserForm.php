@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Users\Schemas;
 
-use App\Context\OrganizationContext;
 use App\Enums\UserRole;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -10,8 +9,10 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Hash;
 
-class UserForm {
-    public static function configure(Schema $schema): Schema {
+class UserForm
+{
+    public static function configure(Schema $schema): Schema
+    {
         return $schema
             ->components([
                 Section::make('Account Information')
@@ -20,14 +21,15 @@ class UserForm {
                             ->relationship('organization', 'name')
                             ->searchable()
                             ->preload()
-                            ->visible(
-                                fn() => auth()->user()?->isAdmin()
+                            ->disabled(
+                                fn () => ! auth()->user()?->isAdmin()
                             )
+                            ->live()
                             ->default(
-                                fn() => auth()->user()?->isAdmin()
+                                fn () => auth()->user()?->isAdmin()
                                     ? null
                                     : auth()->user()->organization_id
-                            ),
+                            )->dehydrated(true),
 
                         Select::make('role')
                             ->options(function (): array {
@@ -35,7 +37,7 @@ class UserForm {
 
                                 if ($user?->isAdmin()) {
                                     return collect(UserRole::cases())
-                                        ->mapWithKeys(fn(UserRole $role) => [
+                                        ->mapWithKeys(fn (UserRole $role) => [
                                             $role->value => $role->label(),
                                         ])
                                         ->all();
@@ -72,13 +74,13 @@ class UserForm {
                             ->password()
                             ->revealable()
                             ->required(
-                                fn(string $operation) => $operation === 'create'
+                                fn (string $operation) => $operation === 'create'
                             )
                             ->dehydrated(
-                                fn($state) => filled($state)
+                                fn ($state) => filled($state)
                             )
                             ->dehydrateStateUsing(
-                                fn(string $state): string => Hash::make($state)
+                                fn (string $state): string => Hash::make($state)
                             ),
                     ]),
             ]);

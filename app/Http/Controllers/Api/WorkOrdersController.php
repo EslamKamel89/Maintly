@@ -33,4 +33,29 @@ class WorkOrdersController extends Controller
 
         return response()->json($workOrders->get());
     }
+
+    public function show(Request $request, WorkOrder $workOrder)
+    {
+        $workOrder->load([
+            'customer',
+            'location',
+            'creator',
+            'assets',
+            'technicians',
+            'comments.user',
+            'attachments.uploader',
+        ]);
+
+        return response()->json($workOrder);
+    }
+
+    public function complete(Request $request, WorkOrder $workOrder)
+    {
+        $workOrder->update([
+            'status' => WorkOrderStatus::Completed,
+            'completed_at' => now(),
+        ]);
+
+        return response()->json($workOrder);
+    }
 }
