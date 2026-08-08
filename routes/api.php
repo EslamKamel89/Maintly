@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CommentsController;
+use App\Http\Controllers\Api\TechnicianController;
 use App\Http\Controllers\Api\WorkOrderAttachmentsController;
 use App\Http\Controllers\Api\WorkOrdersController;
 use Illuminate\Http\Request;
@@ -28,5 +29,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
     Route::prefix('/attachments')->name('attachments.')->group(function () {
         Route::post('/', [WorkOrderAttachmentsController::class, 'store']);
+    });
+    Route::prefix('/technicians')->name('technicians.')->group(function () {
+        Route::post('/location', [TechnicianController::class, 'updateLocation']);
     });
 });
