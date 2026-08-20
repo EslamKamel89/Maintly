@@ -24569,6 +24569,49 @@ namespace Fruitcake\LaravelDebugbar\Facades {
             }
     }
 
+namespace Kreait\Laravel\Firebase\Facades {
+    /**
+     * @method static AppCheck appCheck()
+     * @method static Auth auth()
+     * @method static Database database()
+     * @method static Firestore firestore()
+     * @method static Messaging messaging()
+     * @method static RemoteConfig remoteConfig()
+     * @method static Storage storage()
+     * @see FirebaseProjectManager
+     * @see FirebaseProject
+     */
+    class Firebase {
+        /**
+         * @static
+         */
+        public static function project($name = null)
+        {
+            /** @var \Kreait\Laravel\Firebase\FirebaseProjectManager $instance */
+            return $instance->project($name);
+        }
+
+        /**
+         * @static
+         */
+        public static function getDefaultProject()
+        {
+            /** @var \Kreait\Laravel\Firebase\FirebaseProjectManager $instance */
+            return $instance->getDefaultProject();
+        }
+
+        /**
+         * @static
+         */
+        public static function setDefaultProject($name)
+        {
+            /** @var \Kreait\Laravel\Firebase\FirebaseProjectManager $instance */
+            return $instance->setDefaultProject($name);
+        }
+
+            }
+    }
+
 namespace Flux {
     /**
      * @see \Flux\FluxManager
@@ -34400,6 +34443,7 @@ namespace  {
     class View extends \Illuminate\Support\Facades\View {}
     class Vite extends \Illuminate\Support\Facades\Vite {}
     class Debugbar extends \Fruitcake\LaravelDebugbar\Facades\Debugbar {}
+    class Firebase extends \Kreait\Laravel\Firebase\Facades\Firebase {}
     class Flux extends \Flux\Flux {}
     class Livewire extends \Livewire\Livewire {}
 }
