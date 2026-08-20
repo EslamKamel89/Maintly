@@ -22,7 +22,7 @@ class AuthController extends Controller
         $credentials = Validator::make($request->all(), [
             'email' => ['required', 'email'],
             'password' => ['required', 'string'],
-            'fcm_token' => ['sometimes', 'string'],
+            'fcm_token' => ['sometimes', 'nullable', 'string'],
         ])->validate();
 
         /** @var User|null $user */
@@ -62,7 +62,7 @@ class AuthController extends Controller
                 'max:255',
                 'unique:organizations,name',
             ],
-            'fcm_token' => ['sometimes', 'string'],
+            'fcm_token' => ['sometimes', 'nullable', 'string'],
 
         ])->validate();
 
