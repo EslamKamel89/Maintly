@@ -27,4 +27,5 @@ summarize.py
 app__Models.txt
 database__migrations.txt
 app__Filament.txt
+routes.txt
 llm/
