@@ -4,14 +4,18 @@ namespace App\Models;
 
 use App\Enums\WorkOrderPriority;
 use App\Enums\WorkOrderStatus;
+use App\Models\Concerns\HasOrganization;
+use App\Observers\WorkOrderObserver;
+use Database\Factories\WorkOrderFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use App\Models\Concerns\HasOrganization;
 
+#[ObservedBy([WorkOrderObserver::class])]
 #[Fillable([
     'organization_id',
     'customer_id',
@@ -26,11 +30,13 @@ use App\Models\Concerns\HasOrganization;
     'started_at',
     'completed_at',
 ])]
-class WorkOrder extends Model {
-    /** @use HasFactory<\Database\Factories\WorkOrderFactory> */
+class WorkOrder extends Model
+{
+    /** @use HasFactory<WorkOrderFactory> */
     use HasFactory, HasOrganization;
 
-    protected function casts(): array {
+    protected function casts(): array
+    {
         return [
             'status' => WorkOrderStatus::class,
             'priority' => WorkOrderPriority::class,
@@ -41,37 +47,39 @@ class WorkOrder extends Model {
         ];
     }
 
-
-
-    public function customer(): BelongsTo {
+    public function customer(): BelongsTo
+    {
         return $this->belongsTo(Customer::class);
     }
 
-
-    public function location(): BelongsTo {
+    public function location(): BelongsTo
+    {
         return $this->belongsTo(Location::class);
     }
 
-    public function creator(): BelongsTo {
+    public function creator(): BelongsTo
+    {
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    public function assets(): BelongsToMany {
+    public function assets(): BelongsToMany
+    {
         return $this->belongsToMany(
             Asset::class,
             table: 'work_order_assets',
-            foreignPivotKey: "work_order_id",
-            relatedPivotKey: "asset_id",
+            foreignPivotKey: 'work_order_id',
+            relatedPivotKey: 'asset_id',
         )->using(WorkOrderAsset::class)
             ->withTimestamps();
     }
 
-    public function technicians(): BelongsToMany {
+    public function technicians(): BelongsToMany
+    {
         return $this->belongsToMany(
             User::class,
             table: 'work_order_assignments',
-            foreignPivotKey: "work_order_id",
-            relatedPivotKey: "user_id",
+            foreignPivotKey: 'work_order_id',
+            relatedPivotKey: 'user_id',
         )
             ->using(WorkOrderAssignment::class)
             ->withPivot([
@@ -81,23 +89,30 @@ class WorkOrder extends Model {
                 'updated_at',
             ]);
     }
-    public function assignments(): HasMany {
+
+    public function assignments(): HasMany
+    {
         return $this->hasMany(WorkOrderAssignment::class);
     }
 
-    public function comments(): HasMany {
+    public function comments(): HasMany
+    {
         return $this->hasMany(WorkOrderComment::class);
     }
 
-    public function attachments(): HasMany {
-        return $this->hasMany(WorkOrderAttachment::class);
-    }
-    // i added this method because there is a fault in filament that require the default relation name
-    public function workOrderAttachments(): HasMany {
+    public function attachments(): HasMany
+    {
         return $this->hasMany(WorkOrderAttachment::class);
     }
 
-    public function workOrderComments(): HasMany {
+    // i added this method because there is a fault in filament that require the default relation name
+    public function workOrderAttachments(): HasMany
+    {
+        return $this->hasMany(WorkOrderAttachment::class);
+    }
+
+    public function workOrderComments(): HasMany
+    {
         return $this->hasMany(WorkOrderComment::class);
     }
 }
