@@ -22,6 +22,7 @@ class AuthController extends Controller
         $credentials = Validator::make($request->all(), [
             'email' => ['required', 'email'],
             'password' => ['required', 'string'],
+            'fcm_token' => ['sometimes', 'string'],
         ])->validate();
 
         /** @var User|null $user */
@@ -35,7 +36,12 @@ class AuthController extends Controller
                 'message' => 'The provided credentials are incorrect.',
             ], 422);
         }
-
+        $fcm_token = $credentials['fcm_token'] ?? null;
+        if ($fcm_token) {
+            $user->update([
+                'fcm_token' => $fcm_token,
+            ]);
+        }
         $token = $user->createToken('mobile')->plainTextToken;
 
         return response()->json([
@@ -56,6 +62,8 @@ class AuthController extends Controller
                 'max:255',
                 'unique:organizations,name',
             ],
+            'fcm_token' => ['sometimes', 'string'],
+
         ])->validate();
 
         /** @var User $user */
@@ -70,6 +78,7 @@ class AuthController extends Controller
                 'password' => $data['password'],
                 'organization_id' => $organization->id,
                 'role' => UserRole::Owner,
+                'fcm_token' => $credentials['fcm_token'] ?? null,
             ]);
         });
         $user->load(['organization']);
