@@ -3,23 +3,28 @@
 namespace App\Observers;
 
 use App\Enums\WorkOrderStatus;
-use App\Models\WorkOrder;
+use App\Models\WorkOrderAssignment;
 use App\Services\FirebaseNotificationService;
 
-class WorkOrderObserver
+class WorkOrderAssignmentObserver
 {
-    public function updated(
-        WorkOrder $workOrder,
+    public function created(
+        WorkOrderAssignment $assignment,
     ): void {
         $notifications = app(FirebaseNotificationService::class);
-        if (! $workOrder->wasChanged('status')) {
+        $assignment->loadMissing([
+            'workOrder',
+            'technician',
+        ]);
+
+        $workOrder = $assignment->workOrder;
+        $technician = $assignment->technician;
+
+        if (! $workOrder || ! $technician) {
             return;
         }
 
-        /** @var WorkOrderStatus|null $status */
-        $status = $workOrder->status;
-
-        if (! in_array($status, [
+        if (! in_array($workOrder->status, [
             WorkOrderStatus::Assigned,
             WorkOrderStatus::InProgress,
             WorkOrderStatus::Completed,
@@ -27,19 +32,11 @@ class WorkOrderObserver
             return;
         }
 
-        $tokens = $workOrder->technicians()
-            ->whereNotNull('fcm_token')
-            ->pluck('fcm_token')
-            ->filter(fn (mixed $token): bool => is_string($token) && trim($token) !== '')
-            ->unique()
-            ->values()
-            ->all();
-
-        if ($tokens === []) {
+        if (! is_string($technician->fcm_token) || trim($technician->fcm_token) === '') {
             return;
         }
 
-        [$title, $content] = match ($status) {
+        [$title, $content] = match ($workOrder->status) {
             WorkOrderStatus::Assigned => [
                 'Work Order Assigned',
                 'You have been assigned a new work order.',
@@ -59,8 +56,8 @@ class WorkOrderObserver
         };
 
         $notifications->sendToTokens(
-            tokens: $tokens,
-            notificationId: "work-order-{$workOrder->id}-{$status->value}",
+            tokens: [$technician->fcm_token],
+            notificationId: "work-order-{$workOrder->id}-{$workOrder->status->value}",
             routeName: '/workOrderScreen',
             title: $title,
             content: $content,
